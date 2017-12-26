@@ -1,5 +1,5 @@
 # AutoFoldCode
-_A Sublime Text package that saves/restores Folded Code Regions in files automagically ⭐_
+_A Sublime Text package that saves/restores Folded Code Regions in files automagically. Originally developed by @callodacity._
 
 This plugin makes folded code regions persist - whether you're just opening / closing a file, starting / quitting Sublime Text or rebooting your computer, `AutoFoldCode` will restore your folded code with no hassle.
 
