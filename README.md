@@ -16,7 +16,7 @@ Once installed, AutoFoldCode will automatically begin persisting code folds. To 
 - When you start Sublime Text for the first time, it opens the last files you have been working with, unfortunately the plugin won't restore the folded regions because there isn't any event for that yet. However, closing and reopening the files (or project) fixes this issue.
 
 ## Authors
-Originally developed by @callodacity, currently it's being mantained by me.
+Originally developed by @callodacity, now it's being mantained by me.
 
 ## License
 [MIT](./LICENSE)
