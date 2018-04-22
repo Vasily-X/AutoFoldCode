@@ -1,0 +1,13 @@
+    ___         __        ______      __    ________          __
+   /   | __  __/ /_____  / ____/___  / /___/ / ____/___  ____/ /__
+  / /| |/ / / / __/ __ \/ /_  / __ \/ / __  / /   / __ \/ __  / _ \
+ / ___ / /_/ / /_/ /_/ / __/ / /_/ / / /_/ / /___/ /_/ / /_/ /  __/
+/_/  |_\__,_/\__/\____/_/    \____/_/\__,_/\____/\____/\__,_/\___/
+
+===================================================================
+
+Thanks for installing AutoFoldCode! This package saves/restores folded code regions in files automatically.
+
+Remember, you can clear AutoFoldCode's cache by selecting the "AutoFoldCode: Clear" command from the Command Palette.
+
+For more information, see: https://github.com/RIDE-2DAY/AutoFoldCode
