@@ -12,9 +12,6 @@ Thank you for checking this out, if you want to support what I do you might [buy
 ## Usage
 Once installed, AutoFoldCode will automatically begin persisting code folds. To clear AutoFoldCode's cache, use the `AutoFoldCode: Clear` command from the Command Palette.
 
-## Known Issues
-- When you start Sublime Text for the first time, it opens the last files you have been working with, unfortunately the plugin won't restore the folded regions because there isn't any event for that yet. However, closing and reopening the files (or project) fixes this issue.
-
 ## Authors
 Originally developed by @callodacity, now it's being mantained by me.
 
