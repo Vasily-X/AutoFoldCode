@@ -3,22 +3,28 @@ import sublime_plugin
 
 import os
 
+# Called at sublime startup, restore folded regions for each view
+def plugin_loaded():
+  for window in sublime.windows():
+    for view in window.views():
+      restore_folds(view)
+
+# Restore all the saved folds.
+def restore_folds(view):
+  s = sublime.load_settings(__storage_file__)
+  saved_regions = s.get(view.file_name(), [])
+
+  if saved_regions:
+    for a, b in saved_regions:
+      view.fold(sublime.Region(a, b))
+
 # File name that our plugin data is saved under.
 __storage_file__ = 'AutoFoldCode.sublime-settings'
 
 class AutoFoldCode(sublime_plugin.EventListener):
-  # Restore all the saved folds.
-  def restore_folds(self, view):
-    s = sublime.load_settings(__storage_file__)
-    saved_regions = s.get(view.file_name(), [])
-
-    if saved_regions:
-      for a, b in saved_regions:
-        view.fold(sublime.Region(a, b))
-
   # Restore folded regions when each file is opened.
   def on_load_async(self, view):
-    self.restore_folds(view)
+    restore_folds(view)
 
   # Save the folded regions to disk.
   def save_regions(self, view):
