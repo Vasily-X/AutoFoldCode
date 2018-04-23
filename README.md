@@ -13,7 +13,9 @@ Thank you for checking this out, if you want to support what I do you might [buy
 Once installed, AutoFoldCode will automatically begin persisting code folds. To clear AutoFoldCode's cache, use the `AutoFoldCode: Clear` command from the Command Palette.
 
 ## Authors
-Originally developed by @callodacity, now it's being mantained by me.
+Originally developed by @callodacity, now it's being mantained by me. Many thanks to the next contributors:
+- @Flowpy
+- @acheronfail
 
 ## License
 [MIT](./LICENSE)
