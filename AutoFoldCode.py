@@ -65,9 +65,10 @@ class AutoFoldCodeListener(sublime_plugin.EventListener):
 # Window Commands #
 # --------------- #
 
-# Clears all the saved code folds.
+# Clears all the saved code folds and unfolds all the currently open windows.
 class AutoFoldCodeClearAllCommand(sublime_plugin.WindowCommand):
   def run(self):
+    self.window.run_command('auto_fold_code_unfold_all')
     clear_cache('*')
 
 # Clears the cache for the current view, and unfolds all its regions.
