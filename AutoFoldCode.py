@@ -61,6 +61,10 @@ class AutoFoldCodeListener(sublime_plugin.EventListener):
   def on_close(self, view):
     save_folds(view);
 
+# --------------- #
+# Window Commands #
+# --------------- #
+
 # Clears all the saved code folds.
 class AutoFoldCodeClearAllCommand(sublime_plugin.WindowCommand):
   def run(self):
@@ -79,3 +83,10 @@ class AutoFoldCodeClearCurrentCommand(sublime_plugin.WindowCommand):
     view = self.window.active_view()
     file_name = view.file_name()
     return view != None and file_name != None
+
+# Unfold all code folds in all open files.
+class AutoFoldCodeUnfoldAllCommand(sublime_plugin.WindowCommand):
+  def run(self):
+    for window in sublime.windows():
+      for view in window.views():
+        view.unfold(sublime.Region(0, view.size()))
