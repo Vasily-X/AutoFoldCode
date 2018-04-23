@@ -58,16 +58,13 @@ class AutoFoldCodeUnfoldAllCommand(sublime_plugin.WindowCommand):
 #   Helpers   #
 # ----------- #
 
-# Restore all the saved folds.
+# Restore the saved folds for the given view.
 def _restore_folds(view):
   settings = sublime.load_settings(__storage_file__)
-  regions = settings.get(view.file_name(), [])
+  for a, b in settings.get(view.file_name(), []):
+    view.fold(sublime.Region(a, b))
 
-  if regions:
-    for a, b in regions:
-      view.fold(sublime.Region(a, b))
-
-# Save the folded regions to disk.
+# Save the folded regions of the view to disk.
 def _save_folds(view):
   settings = sublime.load_settings(__storage_file__)
   regions = [(r.a, r.b) for r in view.folded_regions()]
@@ -87,7 +84,7 @@ def _clear_cache(name):
       if name == '*' or file_name == name:
         settings.erase(file_name)
   except Exception as e:
-    print('[AutoFoldCode.clear] Error loading settings file.')
+    print('[AutoFoldCode._clear_cache] Error loading settings file:')
     print(e)
   # Flush changes to disk.
   sublime.save_settings(__storage_file__)
