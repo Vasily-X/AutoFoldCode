@@ -37,15 +37,13 @@ class AutoFoldCodeClearAllCommand(sublime_plugin.WindowCommand):
 class AutoFoldCodeClearCurrentCommand(sublime_plugin.WindowCommand):
   def run(self):
     view = self.window.active_view()
-    file_name = view.file_name()
-    if view and file_name:
+    if view and view.file_name():
       view.unfold(sublime.Region(0, view.size()))
-      _clear_cache(file_name)
+      _clear_cache(view.file_name())
 
   def is_enabled(self):
     view = self.window.active_view()
-    file_name = view.file_name()
-    return view != None and file_name != None
+    return view != None and view.file_name() != None
 
 # Unfold all code folds in all open files.
 class AutoFoldCodeUnfoldAllCommand(sublime_plugin.WindowCommand):
