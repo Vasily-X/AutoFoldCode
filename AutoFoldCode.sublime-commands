@@ -1,3 +1,4 @@
 [
-  { "caption": "AutoFoldCode: Clear", "command": "auto_fold_code_clear" },
+  { "caption": "AutoFoldCode: Clear All", "command": "auto_fold_code_clear_all" },
+  { "caption": "AutoFoldCode: Clear Current File", "command": "auto_fold_code_clear_current" }
 ]
