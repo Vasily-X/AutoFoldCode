@@ -10,7 +10,14 @@ Thank you for checking this out, if you want to support what I do you might [buy
 2. Search for `AutoFoldCode` and install.
 
 ## Usage
-Once installed, AutoFoldCode will automatically begin persisting code folds. To clear AutoFoldCode's cache, use the `AutoFoldCode: Clear` command from the Command Palette.
+Once installed, AutoFoldCode will automatically begin persisting code folds.
+
+AutoFoldCode also includes some useful commands:
+
+* `AutoFoldCode: Clear All`
+	- This command will clear AutoFoldCode's cache.
+* `AutoFoldCode: Clear Current File`
+	- This command will remove the current file's folded regions from the cache, and unfold all folded regions in the file.
 
 ## Authors
 Originally developed by @callodacity, now it's being mantained by me.
