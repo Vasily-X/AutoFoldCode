@@ -10,7 +10,8 @@ __storage_path__ = os.path.join('Packages', 'User', __storage_file__)
 def plugin_loaded():
   for window in sublime.windows():
     for view in window.views():
-      _restore_folds(view)
+      if view.file_name():
+        _restore_folds(view)
 
 # Listen to changes in views to automatically save code folds.
 class AutoFoldCodeListener(sublime_plugin.EventListener):
@@ -22,6 +23,10 @@ class AutoFoldCodeListener(sublime_plugin.EventListener):
 
   def on_close(self, view):
     _save_folds(view)
+
+  def on_text_command(self, view, command_name, args):
+    if command_name == 'unfold_all' and view.file_name() != None:
+      _clear_cache(view.file_name())
 
 # ------------------- #
 #   Window Commands   #
