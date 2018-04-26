@@ -1,0 +1,18 @@
+AutoFoldCode 1.1.0
+==================
+
+This release includes support for some new commands, as well as various bug fixes and improvements.
+Please see the README at https://github.com/RIDE-2DAY/AutoFoldCode for the latest updates.
+
+Thanks for using AutoFoldCode!
+
+Changelog:
+
+* feat: add "AutoFoldCode: Clear Current File" command
+* feat: add "AutoFoldCode: Unfold All Open Files" command
+* feat: when running "AutoFoldCode: Clear All" this unfolds all the open views as well
+* fix: if there were no folded regions, then the cache wouldn't update
+* fix: errors now handled when there are no active views
+* fix: errors handled when starting plugin with no active views
+* fix: cache no longer contains empty entries
+* improvements to code quality and structure
