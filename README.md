@@ -18,6 +18,9 @@ AutoFoldCode also includes some useful commands:
 	- This command will clear AutoFoldCode's cache.
 * `AutoFoldCode: Clear Current File`
 	- This command will remove the current file's folded regions from the cache, and unfold all folded regions in the file.
+* `AutoFoldCode: Unfold All Open Files`
+	- This unfolds all open files in all open windows.
+	- If you want to just unfold just the current file, Sublime Text already includes the `"unfold_all"` command for this.
 
 ## Authors
 Originally developed by @callodacity, now it's being mantained by me. Many thanks to the next contributors:
