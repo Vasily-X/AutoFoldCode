@@ -10,7 +10,7 @@ __storage_path__ = os.path.join('Packages', 'User', __storage_file__)
 def plugin_loaded():
   for window in sublime.windows():
     for view in window.views():
-      if view.file_name():
+      if view.file_name() != None:
         _restore_folds(view)
 
 # Listen to changes in views to automatically save code folds.
@@ -71,7 +71,10 @@ def _restore_folds(view):
 def _save_folds(view):
   settings = sublime.load_settings(__storage_file__)
   regions = [(r.a, r.b) for r in view.folded_regions()]
-  settings.set(view.file_name(), regions)
+  if regions:
+    settings.set(view.file_name(), regions)
+  else:
+    settings.erase(view.file_name())
   sublime.save_settings(__storage_file__)
 
 # Clears the cache. If name is '*', it will clear the whole cache.
