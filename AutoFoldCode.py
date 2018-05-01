@@ -69,14 +69,15 @@ def _restore_folds(view):
 
 # Save the folded regions of the view to disk.
 def _save_folds(view):
-  settings = sublime.load_settings(__storage_file__)
-  regions = [(r.a, r.b) for r in view.folded_regions()]
   file_name = view.file_name()
-  if regions:
-    settings.set(file_name, regions)
-  elif settings.has(file_name):
-    settings.erase(file_name)
-  sublime.save_settings(__storage_file__)
+  if file_name != None:
+    settings = sublime.load_settings(__storage_file__)
+    regions = [(r.a, r.b) for r in view.folded_regions()]
+    if regions:
+      settings.set(file_name, regions)
+    elif settings.has(file_name):
+      settings.erase(file_name)
+    sublime.save_settings(__storage_file__)
 
 # Clears the cache. If name is '*', it will clear the whole cache.
 # Otherwise, pass in the file_name of the view to clear the view's cache.
