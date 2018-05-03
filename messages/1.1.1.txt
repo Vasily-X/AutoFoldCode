@@ -1,0 +1,6 @@
+See the README at https://github.com/RIDE-2DAY/AutoFoldCode for the latest updates.
+Thanks for using AutoFoldCode!
+
+Changelog:
+
+* fix: closing a scratch view would trigger an exception
