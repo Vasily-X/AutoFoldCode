@@ -2,6 +2,22 @@ import os
 import sublime
 import sublime_plugin
 
+'''
+Storage file format:
+
+  {
+    "<filename>":
+    [
+      [
+        <region_start>,
+        <region_end>
+      ],
+      ...
+    ],
+    ...
+  }
+'''
+
 # File name/path where the plugin data is saved.
 __storage_file__ = 'AutoFoldCode.sublime-settings'
 __storage_path__ = os.path.join('Packages', 'User', __storage_file__)
@@ -21,6 +37,8 @@ class AutoFoldCodeListener(sublime_plugin.EventListener):
   def on_post_save_async(self, view):
     _save_folds(view)
 
+  # Listening on close events is required to handle hot exit, for whom there is
+  # no available listener.
   def on_close(self, view):
     _save_folds(view)
 
