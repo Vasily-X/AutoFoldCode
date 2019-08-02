@@ -154,7 +154,8 @@ def _clear_cache(name):
   settings, all_folds_data = _load_storage_settings(save_on_reset=False)
 
   file_names_to_delete = [file_name for file_name in all_folds_data if name == '*' or file_name == name]
-  for file_name in file_names_to_delete: all_folds_data.pop(file_name)
+  for file_name in file_names_to_delete:
+    all_folds_data.pop(file_name)
 
   settings.set("folds", all_folds_data)
   sublime.save_settings(__storage_file__)
