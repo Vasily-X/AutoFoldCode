@@ -46,6 +46,7 @@ __storage_file__ = 'AutoFoldCode.sublime-settings'
 __storage_path__ = os.path.join('Packages', 'User', __storage_file__)
 
 CURRENT_STORAGE_VERSION = 1
+MAX_BUFFER_SIZE_DEFAULT = 1000000
 
 # Called at sublime startup: restore folded regions for each view.
 def plugin_loaded():
@@ -120,6 +121,10 @@ def _restore_folds(view):
   if file_name != None:
     settings, all_folds_data = _load_storage_settings(save_on_reset=True)
 
+    # Skip restoring folds if the file size is larger than `max_buffer_size`.
+    if view.size() > settings.get("max_buffer_size", MAX_BUFFER_SIZE_DEFAULT):
+      return
+
     view_folds_data = all_folds_data.get(file_name, {})
     view_content_checksum = _compute_view_content_checksum(view)
 
@@ -132,6 +137,10 @@ def _save_folds(view, clean_existing_fold_versions):
 
   if file_name != None:
     settings, all_folds_data = _load_storage_settings(save_on_reset=False)
+
+    # Skip saving folds if the file size is larger than `max_buffer_size`.
+    if view.size() > settings.get("max_buffer_size", MAX_BUFFER_SIZE_DEFAULT):
+      return
 
     regions = [(r.a, r.b) for r in view.folded_regions()]
 
@@ -170,6 +179,7 @@ def _load_storage_settings(save_on_reset):
     save_on_reset = True
 
   if _is_old_storage_version(settings):
+    settings.set("max_buffer_size", MAX_BUFFER_SIZE_DEFAULT)
     settings.set("version", CURRENT_STORAGE_VERSION)
     settings.set("folds", {})
 

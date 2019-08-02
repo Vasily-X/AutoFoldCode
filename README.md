@@ -38,6 +38,10 @@ This package includes some useful commands:
 	- This unfolds all open files in all open windows.
 	- If you want to just unfold just the current file, Sublime Text already includes the `"unfold_all"` command for this.
 
+## Configuration
+
+By default, AutoFoldCode will not save folds in any view whose length exceeds `MAX_BUFFER_SIZE_DEFAULT` characters. You can override this value by supplying a `max_buffer_size: <int>` value in your `AutoFoldCode.sublime-settings` file.
+
 ## FAQ
 
 * "When I start Sublime Text, my code folds aren't restored immediately"
