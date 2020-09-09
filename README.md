@@ -40,7 +40,7 @@ This package includes some useful commands:
 
 ## Configuration
 
-By default, AutoFoldCode will not save folds in any view whose length exceeds `MAX_BUFFER_SIZE_DEFAULT` characters. You can override this value by supplying a `max_buffer_size: <int>` value in your `AutoFoldCode.sublime-settings` file.
+By default, AutoFoldCode will not save folds in any view whose length exceeds `MAX_BUFFER_SIZE_DEFAULT` characters. You can override this value by supplying a `"max_buffer_size": <int>` value in your `AutoFoldCode.sublime-settings` file.
 
 ## FAQ
 
