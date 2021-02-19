@@ -52,13 +52,12 @@ MAX_BUFFER_SIZE_DEFAULT = 1000000
 def plugin_loaded():
   for window in sublime.windows():
     for view in window.views():
-      if view.file_name() != None:
-        _restore_folds(view)
+      view.run_command("auto_fold_code_restore")
 
 # Listen to changes in views to automatically save code folds.
 class AutoFoldCodeListener(sublime_plugin.EventListener):
   def on_load_async(self, view):
-    _restore_folds(view)
+    view.run_command("auto_fold_code_restore")
 
   def on_post_save_async(self, view):
     # Keep only the latest version, since it's guaranteed that on open, the
@@ -110,34 +109,38 @@ class AutoFoldCodeUnfoldAllCommand(sublime_plugin.WindowCommand):
       for view in window.views():
         view.unfold(sublime.Region(0, view.size()))
 
-# ----------- #
-#   Helpers   #
-# ----------- #
+# ----------------- #
+#   Text Commands   #
+# ----------------- #
 
-# Restore the saved folds for the given view.
-def _restore_folds(view):
-  file_name = view.file_name()
-
-  if file_name != None:
-    settings = _load_storage_settings(save_on_reset=True)
-
-    # Skip restoring folds if the file size is larger than `max_buffer_size`.
-    if view.size() > settings.get("max_buffer_size", MAX_BUFFER_SIZE_DEFAULT):
+class AutoFoldCodeRestoreCommand(sublime_plugin.TextCommand):
+  def run(self, edit):
+    file_name = self.view.file_name()
+    if file_name == None:
       return
 
-    view_content_checksum = _compute_view_content_checksum(view)
+    # Skip restoring folds if the file size is larger than `max_buffer_size`.
+    settings = _load_storage_settings(save_on_reset=True)
+    if self.view.size() > settings.get("max_buffer_size", MAX_BUFFER_SIZE_DEFAULT):
+      return
+
+    view_content_checksum = _compute_view_content_checksum(self.view)
 
     # Restore folds
     view_folds_data = settings.get("folds").get(file_name, {})
     for a, b in view_folds_data.get(view_content_checksum, []):
-      view.fold(sublime.Region(a, b))
+      self.view.fold(sublime.Region(a, b))
 
     # Restore selections
     if settings.get("save_selections") == True:
       view_selection_data = settings.get("selections").get(file_name, {})
-      view.selection.clear()
+      self.view.selection.clear()
       for a, b in view_selection_data.get(view_content_checksum, []):
-        view.selection.add(sublime.Region(a, b))
+        self.view.selection.add(sublime.Region(a, b))
+
+# ----------- #
+#   Helpers   #
+# ----------- #
 
 # Save the folded regions of the view to disk.
 def _save_view_data(view, clean_existing_versions):
