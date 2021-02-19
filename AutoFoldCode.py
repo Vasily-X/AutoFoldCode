@@ -63,19 +63,19 @@ class AutoFoldCodeListener(sublime_plugin.EventListener):
   def on_post_save_async(self, view):
     # Keep only the latest version, since it's guaranteed that on open, the
     # saved version of the file is opened.
-    _save_folds(view, True)
+    _save_view_data(view, True)
 
   # Listening on close events is required to handle hot exit, for whom there is
   # no available listener.
   def on_close(self, view):
-    # In this case, we don't clear the previous versions fold data, so that on
+    # In this case, we don't clear the previous versions view data, so that on
     # open, depending on the previous close being a hot exit or a regular window
-    # close, the corresponding fold data is retrieved.
+    # close, the corresponding view data is retrieved.
     #
-    # If a user performs multiple modifications and hot exits, the fold data for
+    # If a user performs multiple modifications and hot exits, the view data for
     # each version is stored. This is acceptable, since the first user initiated
     # save will purge the versions and store only the latest.
-    _save_folds(view, False)
+    _save_view_data(view, False)
 
   def on_text_command(self, view, command_name, args):
     if command_name == 'unfold_all' and view.file_name() != None:
@@ -119,58 +119,82 @@ def _restore_folds(view):
   file_name = view.file_name()
 
   if file_name != None:
-    settings, all_folds_data = _load_storage_settings(save_on_reset=True)
+    settings = _load_storage_settings(save_on_reset=True)
 
     # Skip restoring folds if the file size is larger than `max_buffer_size`.
     if view.size() > settings.get("max_buffer_size", MAX_BUFFER_SIZE_DEFAULT):
       return
 
-    view_folds_data = all_folds_data.get(file_name, {})
     view_content_checksum = _compute_view_content_checksum(view)
 
+    # Restore folds
+    view_folds_data = settings.get("folds").get(file_name, {})
     for a, b in view_folds_data.get(view_content_checksum, []):
       view.fold(sublime.Region(a, b))
 
+    # Restore selections
+    if settings.get("save_selections") == True:
+      view_selection_data = settings.get("selections").get(file_name, {})
+      view.selection.clear()
+      for a, b in view_selection_data.get(view_content_checksum, []):
+        view.selection.add(sublime.Region(a, b))
+
 # Save the folded regions of the view to disk.
-def _save_folds(view, clean_existing_fold_versions):
+def _save_view_data(view, clean_existing_versions):
   file_name = view.file_name()
+  if file_name == None:
+    return
 
-  if file_name != None:
-    settings, all_folds_data = _load_storage_settings(save_on_reset=False)
+  # Skip saving data if the file size is larger than `max_buffer_size`.
+  settings = _load_storage_settings(save_on_reset=False)
+  if view.size() > settings.get("max_buffer_size", MAX_BUFFER_SIZE_DEFAULT):
+    return
 
-    # Skip saving folds if the file size is larger than `max_buffer_size`.
-    if view.size() > settings.get("max_buffer_size", MAX_BUFFER_SIZE_DEFAULT):
-      return
-
-    regions = [(r.a, r.b) for r in view.folded_regions()]
-
+  def _save_region_data(data_key, regions):
+    all_data = settings.get(data_key)
     if regions:
-      if clean_existing_fold_versions or not file_name in all_folds_data:
-        all_folds_data[file_name] = {}
+      if clean_existing_versions or not file_name in all_data:
+        all_data[file_name] = {}
 
-      view_folds_data = all_folds_data.get(file_name)
-      view_content_checksum = _compute_view_content_checksum(view)
-      view_folds_data[view_content_checksum] = regions
+      view_data = all_data.get(file_name)
+      view_data[view_content_checksum] = regions
     else:
-      all_folds_data.pop(file_name, None)
+      all_data.pop(file_name, None)
 
-    settings.set("folds", all_folds_data)
-    sublime.save_settings(__storage_file__)
+    settings.set(data_key, all_data)
+
+  view_content_checksum = _compute_view_content_checksum(view)
+
+  # Save folds
+  fold_regions = [(r.a, r.b) for r in view.folded_regions()]
+  _save_region_data("folds", fold_regions)
+
+  # Save selections if set
+  if settings.get("save_selections") == True:
+    selection_regions = [(r.a, r.b) for r in view.selection]
+    _save_region_data("selections", selection_regions)
+
+  # Save settings
+  sublime.save_settings(__storage_file__)
 
 # Clears the cache. If name is '*', it will clear the whole cache.
 # Otherwise, pass in the file_name of the view to clear the view's cache.
 def _clear_cache(name):
-  settings, all_folds_data = _load_storage_settings(save_on_reset=False)
+  settings = _load_storage_settings(save_on_reset=False)
 
-  file_names_to_delete = [file_name for file_name in all_folds_data if name == '*' or file_name == name]
-  for file_name in file_names_to_delete:
-    all_folds_data.pop(file_name)
+  def _clear_cache_section(data_key):
+    all_data = settings.get(data_key)
+    file_names_to_delete = [file_name for file_name in all_data if name == '*' or file_name == name]
+    for file_name in file_names_to_delete:
+      all_data.pop(file_name)
+    settings.set(data_key, all_data)
 
-  settings.set("folds", all_folds_data)
+  _clear_cache_section("folds")
+  _clear_cache_section("selections")
   sublime.save_settings(__storage_file__)
 
 # Loads the settings, resetting the storage file, if the version is old (or broken).
-# Returns the settings instance, and, for convenience, the folds data.
+# Returns the settings instance
 def _load_storage_settings(save_on_reset):
   try:
     settings = sublime.load_settings(__storage_file__)
@@ -182,11 +206,12 @@ def _load_storage_settings(save_on_reset):
     settings.set("max_buffer_size", MAX_BUFFER_SIZE_DEFAULT)
     settings.set("version", CURRENT_STORAGE_VERSION)
     settings.set("folds", {})
+    settings.set("selections", {})
 
     if save_on_reset:
       sublime.save_settings(__storage_file__)
 
-  return settings, settings.get("folds")
+  return settings
 
 def _is_old_storage_version(settings):
   settings_version = settings.get("version", 0)
