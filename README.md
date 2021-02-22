@@ -1,10 +1,11 @@
 # AutoFoldCode <img src="./resources/fold-marker.png" height="16" />
 
-A Sublime Text package that saves/restores folded code regions in files automatically.
+A Sublime Text package that:
 
-This plugin makes folded code regions persist - whether you're just opening/closing a file, starting/quitting Sublime Text or rebooting your computer, AutoFoldCode will restore your folded code with no hassle.
+* saves/restores folded code regions in files automatically
+* saves/restores selections in files automatically
 
-Thank you for checking this out, if you want to support what I do you might [buy me a coffee](https://ko-fi.com/ridetoday)!
+This plugin makes folded code regions and selections persist - whether you're just opening/closing a file, starting/quitting Sublime Text or rebooting your computer, AutoFoldCode will restore your code folds and selections with no hassle.
 
 ## Installation
 
@@ -18,7 +19,7 @@ Thank you for checking this out, if you want to support what I do you might [buy
 ```bash
 # To install, clone this repository into you Sublime Packages directory:
 cd /path/to/packages/directory
-git clone https://github.com/RIDE-2DAY/AutoFoldCode.git
+git clone https://github.com/Vasily-X/AutoFoldCode.git
 
 # To update to the latest:
 git pull origin master
@@ -40,18 +41,21 @@ This package includes some useful commands:
 
 ## Configuration
 
-By default, AutoFoldCode will not save folds in any view whose length exceeds `MAX_BUFFER_SIZE_DEFAULT` characters. You can override this value by supplying a `"max_buffer_size": <int>` value in your `AutoFoldCode.sublime-settings` file.
+* `max_buffer_size`
+  * By default, AutoFoldCode will not save folds in any view whose length exceeds `MAX_BUFFER_SIZE_DEFAULT` characters. You can override this value by supplying a `"max_buffer_size": <int>` value in your `AutoFoldCode.sublime-settings` file.
+* `save_selections`
+  * You can also disable the feature which saves/restores selections by setting `"save_selections": false` in your `AutoFoldCode.sublime-settings` file.
 
 ## FAQ
 
-* "When I start Sublime Text, my code folds aren't restored immediately"
-	- This is because AutoFoldCode hasn't loaded yet. Once Sublime Text initialises AutoFoldCode, then your folds will be restored.
+* "When I start Sublime Text, my code folds/selections aren't restored immediately"
+	- This is because AutoFoldCode hasn't loaded yet. Once Sublime Text initialises AutoFoldCode, then your folds/selections will be restored.
 * "Sometimes AutoFoldCode folds my code in the wrong places"
-	- This will occur if you have closed Sublime Text, edit the file with another editor, then re-open Sublime Text.
+	- ~~This will occur if you have closed Sublime Text, edit the file with another editor, then re-open Sublime Text.~~ This used to occur in older versions of this plugin, but shouldn't anymore since it now uses a hash to verify the contents of the file.
 
 ## Credits
 
-Many thanks to the [contributors](https://github.com/RIDE-2DAY/AutoFoldCode/graphs/contributors)!  
+Many thanks to the [contributors](https://github.com/Vasily-X/AutoFoldCode/graphs/contributors)!
 And of course, thanks to the great developers at [Sublime Text](http://sublimetext.com/).
 
 ## License
