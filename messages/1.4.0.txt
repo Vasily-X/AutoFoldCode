@@ -1,0 +1,7 @@
+# 1.4.0
+
+Changes:
+
+* Feature: AutoFoldCode now remembers your selections inside each file!
+  This means that when you close and re-open a file, your selections will be restored.
+  This behaviour can be disabled with the `save_selections: <boolean>` setting.

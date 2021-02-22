@@ -6,10 +6,16 @@
   // slowing down your editing).
   "max_buffer_size": 1000000,
 
+  // Should AutoFoldCode save and restore your selections inside the editor?
+  "save_selections": true,
+
   // INTERNAL STORAGE FOR AUTOFOLDCODE -----------------------------------------
 
   // Your code folds are stored in this value.
   "folds": {},
+
+  // Saved selections if enabled.
+  "selections": {},
 
   // ATTENTION: DO NOT EDIT THIS VALUE
   // This is used by AutoFoldCode to check the storage version format of your
